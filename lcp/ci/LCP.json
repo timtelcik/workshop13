@@ -1,0 +1,54 @@
+{
+    "kind": "StatefulSet",
+    "id": "ci",
+    "image": "@liferay.workspace.lcp.jenkins.image@",
+    "deploy": false,
+    "memory": 8192,
+    "cpu": 4,
+    "volumes": {
+      "ciData": "/var/jenkins_home"
+    },
+    "loadBalancer": {
+      "targetPort": 8080
+    },
+    "readinessProbe": {
+      "httpGet": {
+        "path": "/login",
+        "port": 8080
+      },
+      "initialDelaySeconds": 60,
+      "timeoutSeconds": 10,
+      "failureThreshold": 12
+    },
+    "livenessProbe": {
+      "httpGet": {
+        "path": "/login",
+        "port": 8080
+      },
+      "initialDelaySeconds": 300,
+      "timeoutSeconds": 10,
+      "failureThreshold": 12
+    },
+    "env": {
+      "DXPCLOUD_PROJECT_NAME": "workshop13",
+
+      "JENKINS_URL": "https://ci-workshop13-infra.lfr.cloud",
+
+      "JENKINS_ADMIN_USER_NAME": "workshop13",
+      "JENKINS_ADMIN_EMAIL": "workshop13@liferay.com",
+
+      "JENKINS_CUSTOMER_USER_NAME": "customer",
+      "JENKINS_CUSTOMER_PASSWORD": "IGyB0qZ1uIVQhUZB9T8H5mymdyxtuk",
+
+      "JENKINS_EMAIL_NOTIFICATIONS_FROM": "Jenkins CI - workshop13 <workshop13@liferay.com>",
+
+      "LCP_REMOTE": "liferay.cloud",
+
+      "GITHUB_REPOSITORY": "dxpcloud/workshop13"
+    },
+    "environments": {
+      "infra": {
+        "deploy": true
+      }
+    }
+  }

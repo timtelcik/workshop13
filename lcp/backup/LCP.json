@@ -1,0 +1,47 @@
+{
+  "kind": "Deployment",
+  "id": "backup",
+  "image": "@liferay.workspace.lcp.backup.image@",
+  "memory": 1024,
+  "cpu": 2,
+  "loadBalancer": {
+    "targetPort": 3000
+  },
+  "readinessProbe": {
+    "httpGet": {
+      "path": "/",
+      "port": 3000
+    },
+    "initialDelaySeconds": 10,
+    "timeoutSeconds": 60,
+    "failureThreshold": 5,
+    "periodSeconds": 30
+  },
+  "livenessProbe": {
+    "httpGet": {
+      "path": "/",
+      "port": 3000
+    },
+    "initialDelaySeconds": 120,
+    "timeoutSeconds": 60,
+    "failureThreshold": 5,
+    "periodSeconds": 60
+  },
+  "env": {
+    "LCP_BACKUP_FOLDER": "/opt/liferay/data",
+    "LCP_DATABASE_SERVICE": "database",
+    "LCP_MASTER_USER_PASSWORD": "IWL3ivymO91vY8OnCJy50TNmbVhecq"
+  },
+  "volumes": {
+    "data": "/opt/liferay/data"
+  },
+  "dependencies": [
+    "database",
+    "liferay"
+  ],
+  "environments": {
+    "infra": {
+      "deploy": false
+    }
+  }
+}

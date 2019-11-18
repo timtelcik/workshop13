@@ -1,0 +1,47 @@
+{
+  "kind": "Deployment",
+  "id": "database",
+  "image": "@liferay.workspace.lcp.database.image@",
+  "memory": 1024,
+  "cpu": 2,
+  "ports": [
+    {
+      "port": 3306,
+      "external": false
+    },
+    {
+      "port": 3000,
+      "external": false
+    }
+  ],
+  "readinessProbe": {
+    "httpGet": {
+      "path": "/instance/healthy",
+      "port": 3000
+    },
+    "initialDelaySeconds": 30,
+    "periodSeconds": 60,
+    "timeoutSeconds": 10,
+    "failureThreshold": 2
+  },
+  "livenessProbe": {
+    "httpGet": {
+      "path": "/instance/healthy",
+      "port": 3000
+    },
+    "initialDelaySeconds": 600,
+    "periodSeconds": 60,
+    "timeoutSeconds": 60,
+    "failureThreshold": 3
+  },
+  "env": {
+    "LCP_DBNAME": "lportal",
+    "LCP_MASTER_USER_NAME": "dxpcloud",
+    "LCP_MASTER_USER_PASSWORD": "IWL3ivymO91vY8OnCJy50TNmbVhecq"
+  },
+  "environments": {
+    "infra": {
+      "deploy": false
+    }
+  }
+}
